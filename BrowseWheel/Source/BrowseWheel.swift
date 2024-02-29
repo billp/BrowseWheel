@@ -18,6 +18,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import SwiftUI
+import Combine
 
 /// A Carousel View that displays a scrollable, horizontal list of items.
 public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
@@ -29,12 +30,12 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
     @State private var lastX = 0.0
     @State private var width = 0.0
     @State private var currentPage: Int = 0
-    @State private var spacing: Double = 0
-    @State private var padding: Double = 0
-    @State private var minScale: Double = 0
     @State private var proxy: GeometryProxy!
 
-    @Binding private var activePage: Int
+    @Binding private var publicPage: Int
+    @Binding private var spacing: Double
+    @Binding private var padding: Double
+    @Binding private var minScale: Double
 
     /// Initializes a carousel view.
     ///
@@ -60,19 +61,21 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
     ///     MyItemView(item: item)
     /// }
     /// ```
-    init(items: [Item],
-         id: KeyPath<Item, ID>,
-         page: Binding<Int>,
-         spacing: Double = 0.0,
-         padding: Double = 0.0,
-         minScale: Double = 1.0,
-         @ViewBuilder content: @escaping (Item) -> Content) {
+    public init(
+        items: [Item],
+        id: KeyPath<Item, ID>,
+        page: Binding<Int>,
+        spacing: Binding<Double>,
+        padding: Binding<Double>,
+        minScale: Binding<Double>,
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) {
         self.id = id
         self.items = items
-        self._minScale = .init(initialValue: minScale)
-        self._spacing = .init(initialValue: spacing)
-        self._padding = .init(initialValue: padding)
-        self._activePage = page
+        self._publicPage = page
+        self._minScale = minScale
+        self._spacing = spacing
+        self._padding = padding
         self.content = content
     }
 
@@ -92,11 +95,25 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
                 .animation(.spring(duration: 0.28), value: offsetX)
                 .offset(x: offsetX + currentPagePadding)
                 .gesture(dragGesture(reader))
+                .onValueChange(of: self.publicPage) { val in
+                    scroll(to: val)
+                }
                 .onAppear {
+                    print(self.spacing)
                     proxy = reader
-                    self.scroll(to: activePage)
+                    self.scroll(to: self.publicPage)
                 }
             }
+        }
+    }
+
+    struct BindingObserver: View {
+        @Binding var value: Int
+        let action: (Int) -> Void
+
+        var body: some View {
+            Color.clear
+                .onAppear { self.action(self.value) }
         }
     }
 }
@@ -125,19 +142,19 @@ extension BrowseWheel where Item: Identifiable, Item.ID == ID {
     ///     MyItemView(item: item)
     /// }
     /// ```
-    init(items: [Item],
+    public init(items: [Item],
          page: Binding<Int>,
-         spacing: Double = 0.0,
-         padding: Double = 0.0,
-         minScale: Double = 1.0,
+         spacing: Binding<Double>,
+         padding: Binding<Double>,
+         minScale: Binding<Double>,
          @ViewBuilder content: @escaping (Item) -> Content) {
         self.items = items
         self.id = \Item.id
-        self._spacing = .init(initialValue: spacing)
-        self._padding = .init(initialValue: padding)
-        self._minScale = .init(initialValue: minScale)
-        self._activePage = page
         self.content = content
+        self._publicPage = page
+        self._spacing = spacing
+        self._padding = padding
+        self._minScale = minScale
     }
 }
 
@@ -243,9 +260,12 @@ extension BrowseWheel {
     }
 
     private func scroll(to page: Int) {
+        guard page >= 0 && page < items.count else { return }
+        
         offsetX = -Double(page) * proxy.size.width
         lastX = offsetX
         currentPage = page
+        publicPage = page
     }
 }
 
@@ -269,9 +289,9 @@ extension BrowseWheel {
         BrowseWheel(
             items: items,
             page: .constant(0),
-            spacing: -80,
-            padding: 50,
-            minScale: 0.6) { item in
+            spacing: .constant(-80),
+            padding: .constant(50),
+            minScale: .constant(0.6)) { item in
             ZStack {
                 Rectangle()
                     .foregroundColor(item.color)

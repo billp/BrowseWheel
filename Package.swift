@@ -13,7 +13,7 @@ let package = Package(
     targets: [
         .target(
             name: "BrowseWheel",
-            path: "Source"
+            path: "BrowseWheel/Source"
         )
     ],
     swiftLanguageVersions: [.v5]

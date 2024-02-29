@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		F310D9CC2B90D73B00DE5CB2 /* BrowseWheel.h in Headers */ = {isa = PBXBuildFile; fileRef = F310D9CB2B90D73B00DE5CB2 /* BrowseWheel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F310D9D42B90D7E000DE5CB2 /* BrowseWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310D9D32B90D7E000DE5CB2 /* BrowseWheel.swift */; };
+		F39E4B022B90F1190091A740 /* ChangeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39E4B012B90F1190091A740 /* ChangeObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F310D9C82B90D73B00DE5CB2 /* BrowseWheel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BrowseWheel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F310D9CB2B90D73B00DE5CB2 /* BrowseWheel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrowseWheel.h; sourceTree = "<group>"; };
 		F310D9D32B90D7E000DE5CB2 /* BrowseWheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseWheel.swift; sourceTree = "<group>"; };
+		F39E4B012B90F1190091A740 /* ChangeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				F310D9D32B90D7E000DE5CB2 /* BrowseWheel.swift */,
+				F39E4B012B90F1190091A740 /* ChangeObserver.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F310D9D42B90D7E000DE5CB2 /* BrowseWheel.swift in Sources */,
+				F39E4B022B90F1190091A740 /* ChangeObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

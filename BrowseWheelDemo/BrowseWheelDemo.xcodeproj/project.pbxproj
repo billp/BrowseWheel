@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,8 @@
 		F310D9E42B90E47A00DE5CB2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310D9E32B90E47A00DE5CB2 /* ContentView.swift */; };
 		F310D9E62B90E47B00DE5CB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F310D9E52B90E47B00DE5CB2 /* Assets.xcassets */; };
 		F310D9E92B90E47B00DE5CB2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F310D9E82B90E47B00DE5CB2 /* Preview Assets.xcassets */; };
+		F39E4AFD2B90E67B0091A740 /* BrowseWheel in Frameworks */ = {isa = PBXBuildFile; productRef = F39E4AFC2B90E67B0091A740 /* BrowseWheel */; };
+		F39E4B002B90E77F0091A740 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39E4AFF2B90E77F0091A740 /* Item.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,7 @@
 		F310D9E32B90E47A00DE5CB2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F310D9E52B90E47B00DE5CB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F310D9E82B90E47B00DE5CB2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F39E4AFF2B90E77F0091A740 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F39E4AFD2B90E67B0091A740 /* BrowseWheel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +55,7 @@
 		F310D9E02B90E47A00DE5CB2 /* BrowseWheelDemo */ = {
 			isa = PBXGroup;
 			children = (
+				F39E4AFE2B90E7680091A740 /* Models */,
 				F310D9E12B90E47A00DE5CB2 /* BrowseWheelDemoApp.swift */,
 				F310D9E32B90E47A00DE5CB2 /* ContentView.swift */,
 				F310D9E52B90E47B00DE5CB2 /* Assets.xcassets */,
@@ -65,6 +70,14 @@
 				F310D9E82B90E47B00DE5CB2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F39E4AFE2B90E7680091A740 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F39E4AFF2B90E77F0091A740 /* Item.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +96,9 @@
 			dependencies = (
 			);
 			name = BrowseWheelDemo;
+			packageProductDependencies = (
+				F39E4AFC2B90E67B0091A740 /* BrowseWheel */,
+			);
 			productName = BrowseWheelDemo;
 			productReference = F310D9DE2B90E47A00DE5CB2 /* BrowseWheelDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +127,9 @@
 				Base,
 			);
 			mainGroup = F310D9D52B90E47900DE5CB2;
+			packageReferences = (
+				F39E4AFB2B90E67B0091A740 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = F310D9DF2B90E47A00DE5CB2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F310D9E42B90E47A00DE5CB2 /* ContentView.swift in Sources */,
+				F39E4B002B90E77F0091A740 /* Item.swift in Sources */,
 				F310D9E22B90E47A00DE5CB2 /* BrowseWheelDemoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +364,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F39E4AFB2B90E67B0091A740 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F39E4AFC2B90E67B0091A740 /* BrowseWheel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BrowseWheel;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F310D9D62B90E47900DE5CB2 /* Project object */;
 }
