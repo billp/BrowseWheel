@@ -11,6 +11,8 @@ An interactive, SwiftUI-based Carousel View designed for seamless browsing of dy
 - **Responsive Design**: Adapts smoothly to various device sizes and orientations.
 - **State-Bound Page Index**: Programmatically control the carousel's current page.
 
+https://github.com/billp/BrowseWheel/assets/1566052/72f7eab8-e434-4f09-a4f0-0b3a5306e222
+
 ## Installation
 
 ### Swift Package Manager
