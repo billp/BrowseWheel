@@ -32,18 +32,15 @@ import SwiftUI
 struct ContentView: View {
     let items: [YourItemType] = [...]
 
-    @State private var spacing = -80.0
-    @State private var padding = 50.0
-    @State private var minScale = 0.6
     @State private var page = 0
 
     var body: some View {
         CarouselView(
           items: items,
           page: $page,
-          spacing: $spacing,
-          padding: $padding,
-          minScale: $minScale) { item in
+          spacing: .constant(-80),
+          padding: .constant(50),
+          minScale: .constant(0.6)) { item in
               YourItemView(item: item)
           }
     }
