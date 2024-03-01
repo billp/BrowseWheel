@@ -26,5 +26,7 @@ jobs:
     
     # Build BrowseWheelDemo project
     - name: Build BrowseWheelDemo
-      run: xcodebuild build -scheme BrowseWheelDemo -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.2'
+      run: | 
+        cd BrowseWheelDemo
+        xcodebuild build -scheme BrowseWheelDemo -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.2'
 
