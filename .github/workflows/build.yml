@@ -1,0 +1,31 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Swift
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    # Select Xcode 15.2 explicitly
+    - name: Select Xcode 15.2
+      run: sudo xcode-select --switch /Applications/Xcode_15.2.app && xcodebuild -version
+    
+    # Build BrowseWheel project
+    - name: Build BrowseWheel
+      run: xcodebuild build -scheme BrowseWheel -destination 'generic/platform=iOS'
+    
+    # Build BrowseWheelDemo project
+    - name: Build BrowseWheelDemo
+      run: xcodebuild build -scheme BrowseWheelDemo -destination 'generic/platform=iOS'
+
