@@ -36,6 +36,7 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
     @Binding private var spacing: Double
     @Binding private var padding: Double
     @Binding private var minScale: Double
+    @Binding private var itemsOffset: Double
 
     /// Initializes a carousel view.
     ///
@@ -49,6 +50,7 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
     ///   - spacing: Space between items (default is `0.0`).
     ///   - padding: Padding around each item (default is `0.0`).
     ///   - minScale: Minimum scale for items (default is `1.0`).
+    ///   - itemsOffset: The offset of the items (default is `0` = centered).
     ///   - content: Closure returning a view for each item.
     ///
     /// This initializer allows observing and controlling the carousel's
@@ -68,6 +70,7 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
         spacing: Binding<Double>,
         padding: Binding<Double>,
         minScale: Binding<Double>,
+        itemsOffset: Binding<Double>,
         @ViewBuilder content: @escaping (Item) -> Content
     ) {
         self.id = id
@@ -76,6 +79,7 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
         self._minScale = minScale
         self._spacing = spacing
         self._padding = padding
+        self._itemsOffset = itemsOffset
         self.content = content
     }
 
@@ -93,7 +97,7 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
                     }
                 }
                 .animation(.spring(duration: 0.28), value: offsetX)
-                .offset(x: offsetX + currentPagePadding)
+                .offset(x: offsetX + currentPagePadding + itemsOffset)
                 .gesture(dragGesture(reader))
                 .onValueChange(of: self.publicPage) { val in
                     scroll(to: val)
@@ -130,6 +134,7 @@ extension BrowseWheel where Item: Identifiable, Item.ID == ID {
     ///   - spacing: Space between items (default is `0.0`).
     ///   - padding: Padding around each item (default is `0.0`).
     ///   - minScale: Minimum scale for items (default is `1.0`).
+    ///   - itemsOffset: The offset of the items (default is `0` = centered).
     ///   - content: Closure returning a view for each item.
     ///
     /// This initializer allows observing and controlling the carousel's
@@ -142,45 +147,85 @@ extension BrowseWheel where Item: Identifiable, Item.ID == ID {
     ///     MyItemView(item: item)
     /// }
     /// ```
-    public init(items: [Item],
-         page: Binding<Int>,
-         spacing: Binding<Double>,
-         padding: Binding<Double>,
-         minScale: Binding<Double>,
-         @ViewBuilder content: @escaping (Item) -> Content) {
+    public init(
+        items: [Item],
+        page: Binding<Int>,
+        spacing: Binding<Double>,
+        padding: Binding<Double>,
+        minScale: Binding<Double>,
+        itemsOffset: Binding<Double>,
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) {
         self.items = items
         self.id = \Item.id
         self.content = content
         self._publicPage = page
         self._spacing = spacing
         self._padding = padding
+        self._itemsOffset = itemsOffset
         self._minScale = minScale
     }
 }
 
 extension BrowseWheel {
     private func dragGesture(_ reader: GeometryProxy) -> some Gesture {
-        return DragGesture(minimumDistance: 0)
-            .onChanged({ value in
-                offsetX = lastX + value.translation.width
-            })
-            .onEnded({ value in
-                width = reader.size.width
+        let drag = DragGesture(minimumDistance: 30)
+            .onChanged(onGestureChanged)
+            .onEnded(onGestureEnded)
 
-                var newPage = currentPage
-                if isScrollingOutOfBoundsLeft {
-                    newPage = 0
-                } else if isScrollingOutOfBoundsRight {
-                    newPage = items.count - 1
-                } else if shouldChangePageOnLeft(value) {
-                    newPage -= 1
-                } else if shouldChangePageOnRight(value) {
-                    newPage += 1
-                }
-
-                scroll(to: newPage)
-                lastX = offsetX
+        let pinch = MagnificationGesture(minimumScaleDelta: 0.0)
+            .onChanged({ delta in
+                scroll(to: currentPage)
             })
+            .onEnded({ delta in
+                scroll(to: currentPage)
+            })
+
+        let rotation = RotationGesture(minimumAngleDelta: Angle(degrees: 0.0))
+            .onChanged({ delta in
+                scroll(to: currentPage)
+            })
+            .onEnded({ delta in
+                scroll(to: currentPage)
+            })
+
+        let longPress = LongPressGesture(minimumDuration: 0.0, maximumDistance: 0.0)
+            .onChanged({ _ in
+                scroll(to: currentPage)
+            })
+            .onEnded({ delta in
+                scroll(to: currentPage)
+            })
+
+
+        let combinedGesture = drag
+            .simultaneously(with: pinch)
+            .simultaneously(with: rotation)
+            .exclusively(before: longPress)
+
+        return combinedGesture
+    }
+
+    private func onGestureChanged(_ value: DragGesture.Value) {
+        offsetX = lastX + value.translation.width
+    }
+
+    private func onGestureEnded(_ value: DragGesture.Value) {
+        width = proxy.size.width
+
+        var newPage = currentPage
+        if isScrollingOutOfBoundsLeft {
+            newPage = 0
+        } else if isScrollingOutOfBoundsRight {
+            newPage = items.count - 1
+        } else if shouldChangePageOnLeft(value) {
+            newPage -= 1
+        } else if shouldChangePageOnRight(value) {
+            newPage += 1
+        }
+
+        scroll(to: newPage)
+        lastX = offsetX
     }
 
     private func calculateScale(for item: Item, reader: GeometryProxy) -> Double {
@@ -291,7 +336,8 @@ extension BrowseWheel {
             page: .constant(0),
             spacing: .constant(-80),
             padding: .constant(50),
-            minScale: .constant(0.6)) { item in
+            minScale: .constant(0.6),
+            itemsOffset: .constant(-50)) { item in
             ZStack {
                 Rectangle()
                     .foregroundColor(item.color)

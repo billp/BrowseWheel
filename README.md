@@ -40,7 +40,8 @@ struct ContentView: View {
           page: $page,
           spacing: .constant(-80),
           padding: .constant(50),
-          minScale: .constant(0.6)) { item in
+          minScale: .constant(0.6),
+          itemsOffset: .constant(-50)) { item in
               YourItemView(item: item)
           }
     }
