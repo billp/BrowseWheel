@@ -34,10 +34,10 @@ struct ContentView: View {
                 BrowseWheel(
                     items: items,
                     page: $page,
-                    spacing: $spacing,
-                    padding: $padding,
-                    minScale: $minScale,
-                    itemsOffset: $itemsOffset) { item in
+                    spacing: spacing,
+                    padding: padding,
+                    minScale: minScale,
+                    itemsOffset: itemsOffset) { item in
                         ZStack {
                             Rectangle()
                                 .foregroundColor(item.color)
