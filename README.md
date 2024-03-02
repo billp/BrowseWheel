@@ -38,10 +38,10 @@ struct ContentView: View {
         CarouselView(
           items: items,
           page: $page,
-          spacing: .constant(-80),
-          padding: .constant(50),
-          minScale: .constant(0.6),
-          itemsOffset: .constant(-50)) { item in
+          spacing: -80,
+          padding: 50,
+          minScale: 0.6,
+          itemsOffset: -50) { item in
               YourItemView(item: item)
           }
     }

@@ -23,7 +23,7 @@ import Combine
 /// A Carousel View that displays a scrollable, horizontal list of items.
 public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
     var items: [Item]
-    let content: (Item) -> Content
+    @ViewBuilder let content: (Item) -> Content
     let id: KeyPath<Item, ID>
 
     @State private var offsetX = 0.0
@@ -67,19 +67,19 @@ public struct BrowseWheel<Content: View, Item, ID: Hashable>: View {
         items: [Item],
         id: KeyPath<Item, ID>,
         page: Binding<Int>,
-        spacing: Binding<Double>,
-        padding: Binding<Double>,
-        minScale: Binding<Double>,
-        itemsOffset: Binding<Double>,
+        spacing: Double,
+        padding: Double,
+        minScale: Double,
+        itemsOffset: Double,
         @ViewBuilder content: @escaping (Item) -> Content
     ) {
         self.id = id
         self.items = items
         self._publicPage = page
-        self._minScale = minScale
-        self._spacing = spacing
-        self._padding = padding
-        self._itemsOffset = itemsOffset
+        self._minScale = .constant(minScale)
+        self._spacing = .constant(spacing)
+        self._padding = .constant(padding)
+        self._itemsOffset = .constant(itemsOffset)
         self.content = content
     }
 
@@ -150,20 +150,20 @@ extension BrowseWheel where Item: Identifiable, Item.ID == ID {
     public init(
         items: [Item],
         page: Binding<Int>,
-        spacing: Binding<Double>,
-        padding: Binding<Double>,
-        minScale: Binding<Double>,
-        itemsOffset: Binding<Double>,
+        spacing: Double,
+        padding: Double,
+        minScale: Double,
+        itemsOffset: Double,
         @ViewBuilder content: @escaping (Item) -> Content
     ) {
         self.items = items
         self.id = \Item.id
-        self.content = content
         self._publicPage = page
-        self._spacing = spacing
-        self._padding = padding
-        self._itemsOffset = itemsOffset
-        self._minScale = minScale
+        self._spacing = .constant(spacing)
+        self._padding = .constant(padding)
+        self._itemsOffset = .constant(itemsOffset)
+        self._minScale = .constant(minScale)
+        self.content = content
     }
 }
 
@@ -334,10 +334,10 @@ extension BrowseWheel {
         BrowseWheel(
             items: items,
             page: .constant(0),
-            spacing: .constant(-80),
-            padding: .constant(50),
-            minScale: .constant(0.6),
-            itemsOffset: .constant(-50)) { item in
+            spacing: -80,
+            padding: 50,
+            minScale: 0.6,
+            itemsOffset: -50) { item in
             ZStack {
                 Rectangle()
                     .foregroundColor(item.color)
