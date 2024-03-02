@@ -1,7 +1,7 @@
 
 # BrowseWheel
 
-An interactive, SwiftUI-based Paginated View designed for seamless browsing of dynamic content, featuring customizable item spacing, padding, and scale effects.
+An interactive, SwiftUI-based paginated View designed for seamless browsing of dynamic content, featuring customizable item spacing, padding, and scale effects.
 
 ## Features
 
